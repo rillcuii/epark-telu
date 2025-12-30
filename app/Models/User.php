@@ -2,47 +2,49 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+    protected $primaryKey = 'id_user'; // Nama PK custom
+    public $incrementing = false;     // Matikan auto-increment
+    protected $keyType = 'string';    // Tipe data PK adalah string
+
     protected $fillable = [
-        'name',
+        'id_user',
+        'nama_user',
+        'nim',
+        'username',
+        'password',
         'email',
-        'password',
+        'role'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password'];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    // Relasi: User punya banyak kendaraan
+    public function kendaraan()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Kendaraan::class, 'users_id', 'id_user');
+    }
+
+    // Relasi: User punya banyak keluhan
+    public function keluhan()
+    {
+        return $this->hasMany(Keluhan::class, 'users_id', 'id_user');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($model) {
+            $last = static::orderByDesc($model->getKeyName())->first();
+            $num = $last ? (int) substr($last->{$model->getKeyName()}, 1) + 1 : 1;
+            $model->{$model->getKeyName()} = 'U' . str_pad($num, 4, '0', STR_PAD_LEFT);
+        });
     }
 }

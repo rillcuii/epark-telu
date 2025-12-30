@@ -11,25 +11,30 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Tabel Users (Disesuaikan dengan SQL epark)
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->char('id_user', 36)->primary(); // Menggunakan UUID char(36)
+            $table->string('nama_user', 100)->nullable();
+            $table->string('nim', 20)->nullable()->comment('Nullable');
+            $table->string('username', 50)->nullable()->comment('Nullable');
+            $table->string('password', 255)->nullable()->comment('Nullable');
+            $table->string('email', 100)->nullable();
+            $table->enum('role', ['admin', 'mahasiswa', 'satpam'])->nullable();
+            $table->timestamps(); // Ini akan membuat created_at dan updated_at
         });
 
+        // Tabel Password Reset (Bisa tetap dibiarkan bawaan Laravel)
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // Tabel Sessions (Disesuaikan karena ID User kamu menggunakan char(36))
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            // Ubah user_id dari foreignId menjadi char(36) agar cocok dengan id_user
+            $table->char('user_id', 36)->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
