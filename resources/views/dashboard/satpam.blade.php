@@ -10,10 +10,10 @@
                     <h3 class="text-xl font-black uppercase tracking-tight mb-2">Generate QR Code</h3>
                     <p class="text-xs text-red-100 mb-6 opacity-80">Tampilkan QR Code ini untuk di-scan oleh mahasiswa di
                         pintu masuk/keluar.</p>
-                    <button
+                    <a href="{{ route('satpam.qr_display') }}"
                         class="w-full bg-white text-red-600 py-3 rounded-xl font-bold text-sm hover:bg-red-50 transition-all flex items-center justify-center gap-2">
                         <i class="fas fa-qrcode text-lg"></i> TAMPILKAN QR
-                    </button>
+                    </a>
                 </div>
                 <i
                     class="fas fa-shield-alt absolute -right-4 -bottom-4 text-8xl text-white/10 group-hover:rotate-12 transition-transform"></i>

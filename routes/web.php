@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\KeluhanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ParkirController;
+use App\Http\Controllers\QRCodeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,6 +42,9 @@ Route::middleware(['auth'])->group(function () {
         //Lihat Riwayat Parkir
         Route::get('/satpam/riwayat', [ParkirController::class, 'riwayat'])->name('satpam.riwayat_parkir');
         Route::get('/satpam/riwayat/{id}', [ParkirController::class, 'detailRiwayat'])->name('satpam.riwayat.detail');
+
+        Route::get('/satpam/qr-parkir', [QRCodeController::class, 'qrIndex'])->name('satpam.qr_display');
+        Route::get('/satpam/api/new-qr', [QRCodeController::class, 'getNewQR'])->name('satpam.get_new_qr');
     });
 
     //route mahasiswa
