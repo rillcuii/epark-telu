@@ -13,6 +13,7 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/login-sso', [LoginController::class, 'showLoginSSOForm'])->name('login.sso');
 Route::post('/proses-login', [LoginController::class, 'login'])->name('proses.login');
 
 Route::middleware(['auth'])->group(function () {

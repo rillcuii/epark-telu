@@ -16,7 +16,7 @@ return new class extends Migration
             $table->char('id_user', 36)->primary(); // Menggunakan UUID char(36)
             $table->string('nama_user', 100)->nullable();
             $table->string('nim', 20)->nullable()->comment('Nullable');
-            $table->string('username', 50)->nullable()->comment('Nullable');
+            $table->string('username', 50)->nullable()->unique()->comment('Nullable');
             $table->string('password', 255)->nullable()->comment('Nullable');
             $table->string('email', 100)->nullable();
             $table->enum('role', ['admin', 'mahasiswa', 'satpam'])->nullable();

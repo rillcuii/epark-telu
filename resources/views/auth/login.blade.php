@@ -94,7 +94,7 @@
                 </div>
 
                 <!-- SSO Login Button -->
-                <a href=""
+                <a href="{{ route('login.sso') }}"
                     class="block w-full text-center bg-white border-2 border-red-600 text-red-600 hover:bg-red-50 font-semibold py-3 rounded-lg transition duration-200">
                     Login SSO (Mahasiswa)
                 </a>
