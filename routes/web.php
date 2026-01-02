@@ -46,11 +46,17 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/satpam/qr-parkir', [QRCodeController::class, 'qrIndex'])->name('satpam.qr_display');
         Route::get('/satpam/api/new-qr', [QRCodeController::class, 'getNewQR'])->name('satpam.get_new_qr');
+
+        Route::get('/satpam/verifikasi/{id_parkir}', [ParkirController::class, 'showVerifikasi'])->name('satpam.verifikasi');
     });
 
     //route mahasiswa
     Route::middleware(['role:mahasiswa'])->group(function () {
         Route::get('/mahasiswa/dashboard', [DashboardController::class, 'mahasiswa'])->name('mahasiswa.dashboard');
+
+        Route::get('/mahasiswa/pilih-kendaraan', [ParkirController::class, 'pilihKendaraan'])->name('mahasiswa.pilih_kendaraan');
+        Route::get('/mahasiswa/scan/{id_kendaraan}', [ParkirController::class, 'bukaScanner'])->name('mahasiswa.scanner');
+        Route::post('/mahasiswa/scan/proses', [ParkirController::class, 'scanProses'])->name('mahasiswa.scan_proses');
     });
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

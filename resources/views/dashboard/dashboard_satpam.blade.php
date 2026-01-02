@@ -68,7 +68,7 @@
                                     class="px-3 py-1 rounded-full text-[9px] font-black uppercase {{ $scan->status == 'masuk' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
                                     {{ $scan->status }}
                                 </span>
-                                <a href=""
+                                <a href="{{ route('satpam.verifikasi', $scan->id_parkir) }}"
                                     class="bg-gray-900 text-white px-4 py-2 rounded-xl text-[10px] font-bold hover:bg-red-600 transition shadow-sm">
                                     VERIFIKASI
                                 </a>

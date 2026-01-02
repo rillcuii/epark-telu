@@ -4,104 +4,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahasiswa Dashboard - E-Park</title>
+    <title>E-Park | Mahasiswa Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
             .sidebar.open {
                 transform: translateX(0);
             }
         }
+
+        .nav-item-active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #6366f1;
+        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800">
+<body class="bg-[#F8FAFC] text-slate-900">
 
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
         <aside id="sidebar"
-            class="sidebar w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white flex-shrink-0 shadow-2xl fixed md:static h-screen md:h-auto z-50 flex flex-col overflow-y-auto">
-            <!-- Header -->
-            <div class="p-6 border-b border-slate-700">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1
-                            class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                            E-Park</h1>
-                        <p class="text-xs text-gray-400 mt-1">Mahasiswa Panel</p>
+            class="sidebar w-72 bg-[#0F172A] text-white flex-shrink-0 fixed md:static h-screen z-50 flex flex-col transition-all duration-300">
+
+            <div class="p-8">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                        <i class="fas fa-parking text-xl"></i>
                     </div>
-                    <button onclick="toggleSidebar()" class="md:hidden text-gray-400 hover:text-white">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
+                    <div>
+                        <h1 class="text-xl font-extrabold tracking-tight">E-PARK<span class="text-indigo-500">.</span>
+                        </h1>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Student Edition</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Navigation -->
-            <nav class="p-4 space-y-2 flex-grow overflow-y-auto">
+            <nav class="flex-grow px-4 pb-4 space-y-1">
+                <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Main Menu</p>
+
                 <a href="{{ route('mahasiswa.dashboard') }}"
-                    class="flex items-center p-3 rounded-lg transition-all duration-200 group {{ request()->routeIs('mahasiswa.dashboard') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50' : 'hover:bg-slate-700/50 text-gray-300 hover:text-white' }}">
-                    <i
-                        class="fas fa-home w-5 {{ request()->routeIs('mahasiswa.dashboard') ? 'text-white' : 'text-blue-400 group-hover:text-blue-300' }}"></i>
-                    <span class="ml-3 font-medium">HOME</span>
+                    class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('mahasiswa.dashboard') ? 'bg-indigo-600 text-white shadow-indigo-500/20 shadow-lg' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                    <i class="fas fa-grid-2 w-5 text-lg"></i>
+                    <span class="ml-3 font-semibold text-sm tracking-wide">Dashboard</span>
+                </a>
+
+                <a href="{{ route('mahasiswa.pilih_kendaraan') }}"
+                    class="flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group {{ request()->routeIs('mahasiswa.pilih_kendaraan*') || request()->routeIs('mahasiswa.scanner*') ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white' }}">
+                    <i class="fas fa-qrcode w-5 text-lg"></i>
+                    <span class="ml-3 font-semibold text-sm tracking-wide">Scan QR Parkir</span>
+                </a>
+
+                <a href="#"
+                    class="flex items-center px-4 py-3.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all duration-200 group">
+                    <i class="fas fa-history w-5 text-lg"></i>
+                    <span class="ml-3 font-semibold text-sm tracking-wide">Riwayat Parkir</span>
+                </a>
+
+                <a href="#"
+                    class="flex items-center px-4 py-3.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all duration-200 group">
+                    <i class="fas fa-motorcycle w-5 text-lg"></i>
+                    <span class="ml-3 font-semibold text-sm tracking-wide">Kendaraan Saya</span>
                 </a>
             </nav>
 
-            <!-- Logout Section -->
-            <div class="p-4 border-t border-slate-700 mt-auto flex-shrink-0">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit"
-                        class="flex items-center w-full p-3 text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200 group hover:text-red-300">
-                        <i class="fas fa-sign-out-alt w-5"></i>
-                        <span class="ml-3 font-medium">Logout</span>
-                    </button>
-                </form>
+            <div class="p-4 mt-auto">
+                <div class="bg-slate-800/50 rounded-2xl p-4">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center justify-center w-full py-2.5 px-4 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all duration-300 font-bold text-xs uppercase tracking-widest">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Keluar Sistem
+                        </button>
+                    </form>
+                </div>
             </div>
         </aside>
 
-        <!-- Overlay for mobile -->
-        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"
+        <div id="overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden md:hidden"
             onclick="toggleSidebar()"></div>
 
-        <!-- Main Content -->
-        <main class="flex-grow flex flex-col min-h-screen md:ml-0">
-            <!-- Top Bar -->
-            <header class="bg-white shadow-sm sticky top-0 z-30">
-                <div class="flex items-center justify-between px-6 py-4">
-                    <button onclick="toggleSidebar()" class="md:hidden text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-bars text-xl"></i>
+        <main class="flex-grow flex flex-col min-h-screen w-full overflow-x-hidden">
+            <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-30">
+                <div class="flex items-center justify-between px-8 py-4">
+                    <button onclick="toggleSidebar()"
+                        class="md:hidden w-10 h-10 flex items-center justify-center bg-slate-100 rounded-xl text-slate-600">
+                        <i class="fas fa-bars"></i>
                     </button>
 
-                    <div class="flex items-center space-x-4 ml-auto">
-                        <div class="hidden md:flex items-center space-x-3">
-                            <div
-                                class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                A
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-gray-800">Rizky</p>
-                                <p class="text-xs text-gray-500">Mahasiswa</p>
+                    <div class="flex items-center gap-4 ml-auto">
+                        <div class="hidden md:block text-right">
+                            <p class="text-sm font-bold text-slate-900 leading-none">{{ auth()->user()->nama_user }}</p>
+                            <p class="text-[10px] font-bold text-indigo-500 uppercase tracking-tighter mt-1">Mahasiswa
+                                Active</p>
+                        </div>
+                        <div
+                            class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-400 p-[2px] shadow-md shadow-indigo-100">
+                            <div class="w-full h-full bg-white rounded-[14px] flex items-center justify-center">
+                                <span
+                                    class="font-black text-indigo-600">{{ substr(auth()->user()->nama_user, 0, 1) }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </header>
 
-            <!-- Content Area -->
-            <div class="flex-grow p-6 md:p-8">
+            <div class="flex-grow p-6 md:p-10">
                 @yield('content')
             </div>
 
-            <!-- Footer -->
-            <footer class="bg-white border-t border-gray-200 py-4 px-6">
-                <p class="text-center text-sm text-gray-500">
-                    © 2025 E-Park. All rights reserved.
+            <footer class="py-6 px-10 border-t border-slate-100 text-center md:text-left">
+                <p class="text-xs font-medium text-slate-400 uppercase tracking-widest">
+                    &copy; 2026 E-PARK SYSTEM <span class="mx-2 text-slate-200">|</span> TELKOM UNIVERSITY
                 </p>
             </footer>
         </main>
@@ -109,22 +136,10 @@
 
     <script>
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('hidden');
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('hidden');
         }
-
-        // Close sidebar when clicking outside on mobile
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                document.getElementById('overlay').classList.add('hidden');
-                document.getElementById('sidebar').classList.remove('open');
-            }
-        });
     </script>
-
 </body>
 
 </html>

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SatpamDummySeeder::class,
             KeluhanSeeder::class,
+            KendaraanSeeder::class,
         ]);
     }
 }
