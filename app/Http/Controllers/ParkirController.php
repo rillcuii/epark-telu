@@ -135,4 +135,45 @@ class ParkirController extends Controller
 
         return view('satpam.detail_verifikasi', compact('data'));
     }
+
+    public function riwayatMahasiswa(Request $request)
+    {
+        $userId = auth()->user()->id_user;
+
+        $query = Parkir::join('kendaraan', 'parkir.kendaraan_id', '=', 'kendaraan.id_kendaraan')
+            ->where('parkir.users_id', $userId)
+            ->select('parkir.*', 'kendaraan.model_kendaraan', 'kendaraan.nomor_polisi');
+
+        // Fitur Filter Tanggal (Basic Flow point 3)
+        if ($request->filled('tanggal')) {
+            $query->whereDate('parkir.waktu_masuk', $request->tanggal);
+        }
+
+        $history = $query->orderBy('parkir.waktu_masuk', 'desc')->get();
+
+        return view('mahasiswa.riwayat.index', compact('history'));
+    }
+
+    public function detailRiwayatMahasiswa($id_parkir)
+    {
+        $userId = auth()->user()->id_user;
+
+        // Mengambil data lengkap (Basic Flow point 5 & 6)
+        $detail = Parkir::join('users', 'parkir.users_id', '=', 'users.id_user')
+            ->join('kendaraan', 'parkir.kendaraan_id', '=', 'kendaraan.id_kendaraan')
+            ->where('parkir.id_parkir', $id_parkir)
+            ->where('parkir.users_id', $userId) // Keamanan: Pastikan milik sendiri
+            ->select(
+                'parkir.*',
+                'users.nama_user',
+                'kendaraan.nomor_polisi',
+                'kendaraan.model_kendaraan',
+                'kendaraan.warna_kendaraan',
+                'kendaraan.url_foto_kendaraan',
+                'kendaraan.url_foto_stnk'
+            )
+            ->firstOrFail();
+
+        return view('mahasiswa.riwayat.detail', compact('detail'));
+    }
 }

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Park | Mahasiswa Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -68,16 +69,22 @@
                     <span class="ml-3 font-semibold text-sm tracking-wide">Scan QR Parkir</span>
                 </a>
 
-                <a href="#"
+                <a href="{{ route('riwayat.mahasiswa') }}"
                     class="flex items-center px-4 py-3.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all duration-200 group">
                     <i class="fas fa-history w-5 text-lg"></i>
                     <span class="ml-3 font-semibold text-sm tracking-wide">Riwayat Parkir</span>
                 </a>
 
-                <a href="#"
+                <a href="{{ route('mahasiswa.kendaraan.index') }}"
                     class="flex items-center px-4 py-3.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all duration-200 group">
                     <i class="fas fa-motorcycle w-5 text-lg"></i>
                     <span class="ml-3 font-semibold text-sm tracking-wide">Kendaraan Saya</span>
+                </a>
+
+                <a href="{{ route('mahasiswa.keluhan.index') }}"
+                    class="flex items-center px-4 py-3.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all duration-200 group">
+                    <i class="fas fa-comment w-5 text-lg"></i>
+                    <span class="ml-3 font-semibold text-sm tracking-wide">Keluhan Saya</span>
                 </a>
             </nav>
 
