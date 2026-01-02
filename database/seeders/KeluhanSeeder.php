@@ -14,7 +14,7 @@ class KeluhanSeeder extends Seeder
         // 1. Buat Dummy Mahasiswa
         $mhs1 = User::create([
             'nama_user' => 'Rizky Pratama',
-            'username'  => 'rizky_mhs',
+            'username'  => 'rizky2_mhs',
             'password'  => Hash::make('password123'),
             'role'      => 'mahasiswa',
             'email'     => 'rizky@student.com',
@@ -22,7 +22,7 @@ class KeluhanSeeder extends Seeder
 
         $mhs2 = User::create([
             'nama_user' => 'Siti Aminah',
-            'username'  => 'siti_mhs',
+            'username'  => 'siti2_mhs',
             'password'  => Hash::make('password123'),
             'role'      => 'mahasiswa',
             'email'     => 'siti@student.com',
