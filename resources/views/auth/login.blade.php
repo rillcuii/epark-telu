@@ -13,18 +13,13 @@
         <!-- Card Container -->
         <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
             <!-- Header with Logo -->
-            <div class="bg-gray-200 px-6 py-12 flex justify-center">
+            <div class="bg-gray-200 px-2 py-2 flex justify-center">
                 <div class="text-center">
                     <div class="flex items-center justify-center mb-2">
                         <!-- Logo simplified representation -->
-                        <div class="relative">
-                            <div class="w-16 h-16 bg-gray-600 rounded-full"></div>
-                            <div class="absolute top-0 left-0 w-16 h-8 bg-red-600 rounded-t-full"></div>
-                        </div>
-                    </div>
-                    <div class="mt-4">
-                        <h1 class="text-3xl font-bold text-gray-800">DigiPark</h1>
-                        <p class="text-xl text-gray-600">Tel-U</p>
+                        <img src="{{ asset('assets/images/image.png') }}" 
+                        alt="Logo DigiPark" 
+                        class="h-auto w-80 object-contain">
                     </div>
                 </div>
             </div>

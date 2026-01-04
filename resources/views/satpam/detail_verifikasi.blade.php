@@ -25,20 +25,6 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">Identitas Mahasiswa</p>
                     <h3 class="text-lg font-black tracking-tight">{{ $data->nama_user }}</h3>
                 </div>
-                <div class="p-6 space-y-4">
-                    <div>
-                        <p class="text-[9px] font-black text-slate-400 uppercase">Nomor Induk Mahasiswa (NIM)</p>
-                        <p class="text-sm font-bold text-slate-800">{{ $data->nim ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-[9px] font-black text-slate-400 uppercase">Username / ID</p>
-                        <p class="text-sm font-bold text-slate-800">{{ $data->username }}</p>
-                    </div>
-                    <div>
-                        <p class="text-[9px] font-black text-slate-400 uppercase">Email Institusi</p>
-                        <p class="text-sm font-bold text-slate-800">{{ $data->email }}</p>
-                    </div>
-                </div>
             </div>
 
             <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
@@ -53,7 +39,7 @@
                         <p class="text-sm font-bold text-slate-800">{{ $data->model_kendaraan }}</p>
                     </div>
                     <div>
-                        <p class="text-[9px] font-black text-slate-400 uppercase">Warna Dominan</p>
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Warna Kendaraan</p>
                         <div class="flex items-center gap-2 mt-1">
                             <p class="text-sm font-bold text-slate-800">{{ $data->warna_kendaraan ?? 'Tidak dicantumkan' }}
                             </p>

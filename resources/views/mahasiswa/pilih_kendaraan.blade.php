@@ -47,10 +47,9 @@
                         <i class="fas fa-motorcycle text-3xl"></i>
                     </div>
 
-                    <h3 class="text-xl font-black text-slate-900 tracking-tight">Belum Ada Kendaraan</h3>
+                    <h3 class="text-xl font-black text-slate-900 tracking-tight">Data Kendaraan Tidak Terdaftar</h3>
                     <p class="text-slate-500 mt-2 text-sm leading-relaxed">
-                        Anda belum mendaftarkan kendaraan apapun. Silakan daftarkan kendaraan Anda terlebih dahulu untuk
-                        menggunakan layanan parkir.
+                        Silahkan daftarkan kendaraan terlebih dahulu.
                     </p>
 
                     <a href=""

@@ -40,7 +40,7 @@ class LoginController extends Controller
             return $this->redirectByRole(Auth::user()->role);
         }
 
-        return back()->with('error', 'Username atau password salah.');
+        return back()->with('error', 'Akun Tidak Terdaftar.');
     }
 
     // Logic untuk SSO (Mahasiswa)
