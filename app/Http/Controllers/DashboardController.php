@@ -22,7 +22,7 @@ class DashboardController extends Controller
 
         $lastKeluhanSelesai = Keluhan::where('status_keluhan', 'sudah_ditangani')->latest()->first();
 
-        return view('dashboard.admin', compact(
+        return view('dashboard.dashboard_admin', compact(
             'countSatpam',
             'countMahasiswa',
             'countKeluhan',
@@ -41,7 +41,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboard.satpam', compact('recentScans'));
+        return view('dashboard.dashboard_satpam', compact('recentScans'));
     }
 
     public function showScanDetail($id)
@@ -53,6 +53,6 @@ class DashboardController extends Controller
 
     public function mahasiswa()
     {
-        return view('dashboard.mahasiswa');
+        return view('dashboard.dashboard_mahasiswa');
     }
 }

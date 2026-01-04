@@ -1,103 +1,116 @@
 @extends('layouts.satpam')
 
 @section('content')
-    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <div>
-            <h1 class="text-2xl font-black text-gray-900 uppercase tracking-tight">Riwayat Parkir</h1>
-            <p class="text-sm text-gray-500 italic">Monitoring data masuk dan keluar kendaraan mahasiswa.</p>
-        </div>
-
-        <div class="bg-white p-2 rounded-xl shadow-sm border border-gray-100 flex items-center gap-2">
-            <form action="{{ route('satpam.riwayat_parkir') }}" method="GET" class="flex gap-2">
-                <input type="date" name="tanggal" value="{{ request('tanggal') }}"
-                    class="border-none bg-gray-50 rounded-lg text-sm focus:ring-red-500">
-                <button class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-700 transition">
-                    <i class="fas fa-filter mr-2"></i>Filter
-                </button>
-            </form>
-            @if (request('tanggal'))
-                <a href="{{ route('satpam.riwayat_parkir') }}" class="p-2 text-red-600 hover:bg-red-50 rounded-lg">
-                    <i class="fas fa-times"></i>
+    <div class="min-h-screen bg-[#F8F9FA] relative">
+        <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50">
+            <div class="bg-figmaRed h-32 flex items-center px-8 rounded-b-[40px] shadow-lg">
+                <a href="{{ route('satpam.dashboard') }}" class="text-white text-2xl mr-6 transition active:scale-90">
+                    <i class="fas fa-arrow-left"></i>
                 </a>
-            @endif
+                <h1 class="text-white text-xl font-bold tracking-tight">Riwayat Parkir</h1>
+            </div>
         </div>
-    </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-50/50">
-                    <tr>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Mahasiswa</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Kendaraan</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">
-                            Waktu Masuk</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">
-                            Waktu Keluar</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">
-                            Status</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Aksi
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-50">
-                    @forelse($riwayats as $r)
-                        <tr class="hover:bg-gray-50/80 transition-colors">
-                            <td class="px-6 py-4">
-                                <p class="text-sm font-bold text-gray-900 leading-none">{{ $r->user->nama_user }}</p>
-                                <p class="text-[10px] text-gray-400 font-medium mt-1">{{ $r->user->nim ?? 'NIM tidak ada' }}
-                                </p>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-block bg-gray-100 text-gray-800 text-[10px] font-black px-2 py-1 rounded-md mb-1">{{ $r->kendaraan->plat_nomor }}</span>
-                                <p class="text-[10px] text-gray-400 uppercase">{{ $r->kendaraan->model_kendaraan }}</p>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <p class="text-xs font-semibold text-gray-700">
-                                    {{ \Carbon\Carbon::parse($r->waktu_masuk)->format('H:i') }}</p>
-                                <p class="text-[9px] text-gray-400">
-                                    {{ \Carbon\Carbon::parse($r->waktu_masuk)->format('d/m/Y') }}</p>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                @if ($r->waktu_keluar)
-                                    <p class="text-xs font-semibold text-gray-700">
-                                        {{ \Carbon\Carbon::parse($r->waktu_keluar)->format('H:i') }}</p>
-                                    <p class="text-[9px] text-gray-400">
-                                        {{ \Carbon\Carbon::parse($r->waktu_keluar)->format('d/m/Y') }}</p>
-                                @else
-                                    <span class="text-[10px] text-gray-300 italic">Belum Keluar</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <span
-                                    class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter {{ $r->status == 'masuk' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
-                                    {{ $r->status }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <a href="{{ route('satpam.riwayat.detail', $r->id_parkir) }}"
-                                    class="inline-flex items-center justify-center w-8 h-8 bg-gray-100 text-gray-600 rounded-lg hover:bg-red-600 hover:text-white transition">
-                                    <i class="fas fa-eye text-xs"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-6 py-20 text-center">
-                                <div class="max-w-xs mx-auto text-gray-400">
-                                    <i class="fas fa-folder-open text-4xl mb-4 opacity-20"></i>
-                                    <p class="text-sm font-medium italic">Data riwayat parkir tidak ditemukan.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+        <div class="px-6 pt-24 pb-24">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-900">Daftar kendaraan</h2>
+
+                <form action="{{ route('satpam.riwayat_parkir') }}" method="GET" class="relative">
+                    <input type="date" name="tanggal" onchange="this.form.submit()" value="{{ request('tanggal') }}"
+                        class="absolute inset-0 opacity-0 cursor-pointer">
+                    <div class="flex items-center gap-2 text-gray-500 font-bold text-xs uppercase tracking-widest">
+                        <i class="fas fa-filter text-sm"></i>
+                        <span>Filter</span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="space-y-6">
+                @php $currentDate = null; @endphp
+
+                @forelse($riwayats as $r)
+                    {{-- Logika Grouping Tanggal --}}
+                    @php
+                        $dateRow = \Carbon\Carbon::parse($r->waktu_masuk)->translatedFormat('l, d F Y');
+                    @endphp
+
+                    @if ($currentDate !== $dateRow)
+                        <h3 class="text-sm font-bold text-gray-500 mt-6 mb-2 ml-1 lowercase first-letter:uppercase">
+                            {{ $dateRow }}
+                        </h3>
+                        @php $currentDate = $dateRow; @endphp
+                    @endif
+
+                    <div
+                        class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4 relative overflow-hidden">
+                        {{-- Indikator Warna Status --}}
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-1.5 
+                        @if ($r->status == 'masuk') bg-blue-500 
+                        @elseif($loop->index % 3 == 1) bg-purple-500 
+                        @else bg-yellow-400 @endif">
+                        </div>
+
+                        <div
+                            class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center shrink-0 border border-gray-100">
+                            <i class="fas fa-user text-gray-300 text-xl"></i>
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-sm font-black text-gray-900 leading-tight">{{ $r->kendaraan->plat_nomor }}</h3>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase truncate">
+                                {{ $r->kendaraan->model_kendaraan }}
+                            </p>
+                        </div>
+
+                        <div class="text-[9px] font-bold text-gray-500 space-y-1 pr-10 border-r border-gray-50">
+                            <div class="flex justify-between gap-2">
+                                <span>Waktu Masuk</span>
+                                <span class="text-gray-900">:
+                                    {{ \Carbon\Carbon::parse($r->waktu_masuk)->format('H:i') }}</span>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <span>Waktu Keluar</span>
+                                <span class="text-gray-900">:
+                                    {{ $r->waktu_keluar ? \Carbon\Carbon::parse($r->waktu_keluar)->format('H:i') : '-' }}</span>
+                            </div>
+                        </div>
+
+                        <a href="{{ route('satpam.riwayat.detail', $r->id_parkir) }}"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-gray-50 rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors border border-gray-100">
+                            <i class="fas fa-list-ul text-xs"></i>
+                        </a>
+                    </div>
+                @empty
+                    <div class="flex flex-col items-center justify-center py-20 opacity-40">
+                        <div class="relative mb-4">
+                            <i class="fas fa-folder-open text-7xl text-gray-300"></i>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-1 bg-gray-400 rotate-45 rounded-full"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs font-bold text-gray-400 italic">"Data riwayat parkir tidak ditemukan"</p>
+                    </div>
+                @endforelse
+            </div>
+
+            <div class="mt-8">
+                {{ $riwayats->links() }}
+            </div>
         </div>
-    </div>
 
-    <div class="mt-6">
-        {{ $riwayats->links() }}
+        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] flex justify-center z-50">
+            <div class="relative w-full flex justify-center">
+                <div class="absolute bottom-0 w-full h-10 bg-white shadow-[0_-5px_15px_rgba(0,0,0,0.03)]"
+                    style="clip-path: polygon(0 0, 38% 0, 42% 40%, 50% 60%, 58% 40%, 62% 0, 100% 0, 100% 100%, 0 100%);">
+                </div>
+                <div class="relative -top-6 bg-white p-2 rounded-full shadow-lg">
+                    <div
+                        class="w-14 h-14 bg-white rounded-full flex items-center justify-center border border-gray-100 shadow-inner">
+                        <i class="fas fa-history text-2xl text-gray-800"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

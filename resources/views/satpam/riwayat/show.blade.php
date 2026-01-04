@@ -1,108 +1,129 @@
 @extends('layouts.satpam')
 
 @section('content')
-    <div class="max-w-5xl mx-auto">
-        <div class="flex items-center justify-between mb-8">
-            <a href="{{ route('satpam.riwayat_parkir') }}"
-                class="group flex items-center text-sm font-bold text-gray-500 hover:text-red-600 transition">
-                <div
-                    class="w-8 h-8 bg-white border border-gray-100 rounded-lg flex items-center justify-center mr-3 group-hover:border-red-100 group-hover:bg-red-50 transition">
-                    <i class="fas fa-chevron-left text-[10px]"></i>
-                </div>
-                KEMBALI KE RIWAYAT
-            </a>
-            <div class="text-right">
-                <span
-                    class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest {{ $parkir->status == 'masuk' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
-                    Status: {{ $parkir->status }}
-                </span>
+    <div class="min-h-screen bg-[#F8F9FA] relative">
+        <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50">
+            <div class="bg-figmaRed h-32 flex items-center px-8 rounded-b-[40px] shadow-lg">
+                <a href="{{ route('satpam.riwayat_parkir') }}" class="text-white text-2xl mr-6 transition active:scale-90">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1 class="text-white text-xl font-bold tracking-tight">Detail Data Kendaraan</h1>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-1 space-y-6">
-                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">Informasi Mahasiswa</h3>
-                    <div class="flex items-center gap-4 mb-6">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode($parkir->user->nama_user) }}&background=F1F5F9&color=64748b"
-                            class="w-12 h-12 rounded-2xl" alt="">
-                        <div>
-                            <p class="text-sm font-bold text-gray-900 leading-none">{{ $parkir->user->nama_user }}</p>
-                            <p class="text-[10px] text-gray-400 font-medium mt-1">
-                                {{ $parkir->user->nim ?? 'NIM tidak tersedia' }}</p>
-                        </div>
-                    </div>
-                    <div class="space-y-4 pt-4 border-t border-gray-50">
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase">Waktu Masuk</p>
-                            <p class="text-xs font-semibold text-gray-700">
-                                {{ \Carbon\Carbon::parse($parkir->waktu_masuk)->format('d M Y, H:i') }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase">Waktu Keluar</p>
-                            <p class="text-xs font-semibold text-gray-700">
-                                {{ $parkir->waktu_keluar ? \Carbon\Carbon::parse($parkir->waktu_keluar)->format('d M Y, H:i') : '-' }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        <div class="px-6 pt-24 pb-24 max-w-[430px] mx-auto">
+            <h2 class="text-lg font-bold text-gray-900 mb-4 ml-1">Detail Kendaraan</h2>
 
-                <div class="bg-slate-900 p-6 rounded-3xl text-white">
-                    <p class="text-[9px] text-slate-500 font-bold uppercase mb-2">ID Transaksi Parkir</p>
-                    <code class="text-[10px] break-all text-slate-300 font-mono">{{ $parkir->id_parkir }}</code>
-                </div>
-            </div>
+            <div class="bg-white rounded-[28px] shadow-sm border border-gray-50 relative overflow-hidden p-6">
+                <div class="absolute left-0 top-6 bottom-6 w-1 bg-[#EE2B2B] rounded-r-full"></div>
 
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-gray-50 bg-gray-50/30">
-                        <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Detail Kendaraan</h3>
-                    </div>
-                    <div class="p-6 grid grid-cols-2 gap-6">
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase">Nomor Polisi</p>
-                            <p class="text-lg font-black text-gray-900 tracking-tight">
-                                {{ $parkir->kendaraan->nomor_polisi }}</p>
+                <div class="space-y-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex gap-2.5">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#EE2B2B] shrink-0"></div>
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">No. Polisi</p>
+                                <p class="text-sm font-bold text-gray-900">{{ $parkir->kendaraan->nomor_polisi }}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase">Model / Tipe</p>
-                            <p class="text-sm font-bold text-gray-800">{{ $parkir->kendaraan->model_kendaraan }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase">Warna</p>
-                            <p class="text-sm font-bold text-gray-800">{{ $parkir->kendaraan->warna_kendaraan }}</p>
+                        <div class="flex gap-2.5">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#EE2B2B] shrink-0"></div>
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Model</p>
+                                <p class="text-sm font-bold text-gray-900 truncate">
+                                    {{ $parkir->kendaraan->model_kendaraan }}</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-gray-50">
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase mb-3">Dokumentasi Kendaraan</p>
-                            <div
-                                class="relative aspect-video rounded-2xl overflow-hidden border border-gray-100 bg-gray-50">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex gap-2.5">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#EE2B2B] shrink-0"></div>
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Pemilik</p>
+                                <p class="text-sm font-bold text-gray-900 truncate">{{ $parkir->user->nama_user }}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2.5">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#EE2B2B] shrink-0"></div>
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Warna</p>
+                                <p class="text-sm font-bold text-gray-900">{{ $parkir->kendaraan->warna_kendaraan ?? '-' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="h-[1px] bg-gray-50 w-full my-2"></div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex gap-2.5">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Waktu Masuk</p>
+                                <p class="text-sm font-bold text-gray-900">
+                                    {{ \Carbon\Carbon::parse($parkir->waktu_masuk)->format('H:i') }}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2.5">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0"></div>
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Waktu Keluar</p>
+                                <p class="text-sm font-bold text-gray-900">
+                                    {{ $parkir->waktu_keluar ? \Carbon\Carbon::parse($parkir->waktu_keluar)->format('H:i') : '-' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#EE2B2B]"></div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Foto Unit</p>
+                            </div>
+                            <div class="rounded-2xl overflow-hidden border border-gray-100 h-32 bg-gray-50 shadow-inner">
                                 @if ($parkir->kendaraan->url_foto_kendaraan)
                                     <img src="{{ asset('storage/' . $parkir->kendaraan->url_foto_kendaraan) }}"
-                                        class="w-full h-full object-cover" alt="Foto Kendaraan">
+                                        class="w-full h-full object-cover">
                                 @else
-                                    <div class="flex items-center justify-center h-full text-gray-300">
-                                        <i class="fas fa-image text-3xl"></i>
+                                    <div class="flex items-center justify-center h-full">
+                                        <i class="fas fa-image text-gray-200 text-3xl"></i>
                                     </div>
                                 @endif
                             </div>
                         </div>
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase mb-3">Dokumentasi STNK</p>
-                            <div
-                                class="relative aspect-video rounded-2xl overflow-hidden border border-gray-100 bg-gray-50">
+
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#EE2B2B]"></div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Foto STNK</p>
+                            </div>
+                            <div class="rounded-2xl overflow-hidden border border-gray-100 h-32 bg-gray-50 shadow-inner">
                                 @if ($parkir->kendaraan->url_foto_stnk)
                                     <img src="{{ asset('storage/' . $parkir->kendaraan->url_foto_stnk) }}"
-                                        class="w-full h-full object-cover" alt="Foto STNK">
+                                        class="w-full h-full object-cover">
                                 @else
-                                    <div class="flex items-center justify-center h-full text-gray-300">
-                                        <i class="fas fa-id-card text-3xl"></i>
+                                    <div class="flex items-center justify-center h-full">
+                                        <i class="fas fa-file-invoice text-gray-200 text-3xl"></i>
                                     </div>
                                 @endif
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] flex justify-center z-50">
+            <div class="relative w-full flex justify-center">
+                <div class="absolute bottom-0 w-full h-10 bg-white shadow-[0_-5px_15px_rgba(0,0,0,0.03)]"
+                    style="clip-path: polygon(0 0, 38% 0, 42% 40%, 50% 60%, 58% 40%, 62% 0, 100% 0, 100% 100%, 0 100%);">
+                </div>
+                <div class="relative -top-6 bg-white p-2 rounded-full shadow-lg">
+                    <div
+                        class="w-14 h-14 bg-[#F1F3F4] rounded-full flex items-center justify-center border border-gray-100 shadow-inner">
+                        <i class="fas fa-list-ul text-2xl text-gray-800"></i>
                     </div>
                 </div>
             </div>

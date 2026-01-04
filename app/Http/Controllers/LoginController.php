@@ -14,6 +14,11 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
+    public function showLoginSSOForm()
+    {
+        return view('auth.sso_login');
+    }
+
     public function login(Request $request)
     {
         $username = $request->username;
@@ -29,19 +34,13 @@ class LoginController extends Controller
             return back()->with('error', 'Silahkan Masukkan “Password” Untuk Login!');
         }
 
-        $user = User::where('username', $username)->first();
-
-        if ($user && $user->role === 'mahasiswa') {
-            return back()->with('error', 'Akun Tidak Terdaftar');
-        }
-
         if (Auth::attempt(['username' => $username, 'password' => $password])) {
             $request->session()->regenerate();
 
             return $this->redirectByRole(Auth::user()->role);
         }
 
-        return back()->with('error', 'Username atau password salah.');
+        return back()->with('error', 'Akun Tidak Terdaftar.');
     }
 
     // Logic untuk SSO (Mahasiswa)
