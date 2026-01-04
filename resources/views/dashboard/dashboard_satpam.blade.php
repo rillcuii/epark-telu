@@ -1,92 +1,107 @@
 @extends('layouts.satpam')
 
 @section('content')
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="mt-16">
+        <div class="flex justify-between items-end mb-6">
+            <div>
+                <h2 class="text-xl font-extrabold text-gray-900 leading-none">Aktivitas Parkir</h2>
+                <p class="text-[10px] font-bold text-figmaRed uppercase tracking-widest mt-2">
+                    Hari Ini: {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+                </p>
+            </div>
+        </div>
 
-        <div class="lg:col-span-1 space-y-6">
-            <div
-                class="bg-gradient-to-br from-red-600 to-red-700 p-6 rounded-3xl shadow-xl shadow-red-100 text-white relative overflow-hidden group">
-                <div class="relative z-10">
-                    <h3 class="text-xl font-black uppercase tracking-tight mb-2">Generate QR Code</h3>
-                    <p class="text-xs text-red-100 mb-6 opacity-80">Tampilkan QR Code ini untuk di-scan oleh mahasiswa di
-                        pintu masuk/keluar.</p>
+        <div class="space-y-4 mb-32">
+            @php
+                // Filter koleksi agar hanya menampilkan data yang waktu_masuk-nya hari ini
+                $scansToday = $recentScans->filter(function ($scan) {
+                    return \Carbon\Carbon::parse($scan->waktu_masuk)->isToday();
+                });
+            @endphp
+
+            @forelse ($scansToday as $scan)
+                @php
+                    $isInside = is_null($scan->waktu_keluar);
+                @endphp
+
+                <div class="bg-white border border-gray-100 rounded-2xl shadow-sm flex items-stretch overflow-hidden h-20">
+                    {{-- Indikator Warna --}}
+                    <div class="w-2 {{ $isInside ? 'bg-[#2B7AEE]' : 'bg-emerald-500' }}"></div>
+
+                    <div class="flex-grow flex items-center justify-between px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user {{ $isInside ? 'text-gray-300' : 'text-emerald-200' }} text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-black text-gray-900 leading-none">
+                                    {{ $scan->kendaraan->nomor_polisi }}
+                                </h4>
+                                <p class="text-[9px] font-bold text-gray-400 uppercase mt-1">
+                                    {{ $scan->kendaraan->model_kendaraan }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <div class="text-[9px] text-gray-400 font-bold border-l border-gray-100 pl-3 leading-relaxed">
+                                <p>Masuk: <span
+                                        class="text-gray-900">{{ \Carbon\Carbon::parse($scan->waktu_masuk)->format('H:i') }}</span>
+                                </p>
+
+                                @if ($isInside)
+                                    <p class="text-[#2B7AEE] flex items-center gap-1">
+                                        <span class="relative flex h-1.5 w-1.5">
+                                            <span
+                                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500"></span>
+                                        </span>
+                                        Masih Parkir
+                                    </p>
+                                @else
+                                    <p>Keluar: <span
+                                            class="text-emerald-600">{{ \Carbon\Carbon::parse($scan->waktu_keluar)->format('H:i') }}</span>
+                                    </p>
+                                @endif
+                            </div>
+
+                            <a href="{{ route('satpam.verifikasi', $scan->id_parkir) }}"
+                                class="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400 border border-gray-100 hover:bg-gray-100 active:scale-95 transition-all">
+                                <i class="fas fa-list-ul text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                {{-- Tampilan jika benar-benar belum ada scan hari ini --}}
+                <div class="flex flex-col items-center justify-center py-24 opacity-40 text-center">
+                    <div class="w-20 h-20 bg-gray-100 rounded-[30px] flex items-center justify-center mb-4">
+                        <i class="fas fa-calendar-day text-4xl text-gray-300"></i>
+                    </div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Belum Ada Scan</p>
+                    <p class="text-[10px] text-gray-400 mt-1">Data scan hari ini akan muncul di sini</p>
+                </div>
+            @endforelse
+        </div>
+
+        {{-- Tombol QR Floating --}}
+        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] flex justify-center z-50">
+            <div class="relative w-full flex justify-center">
+                {{-- Background Notch --}}
+                <div class="absolute bottom-0 w-full h-10 bg-white shadow-[0_-5px_15px_rgba(0,0,0,0.03)]"
+                    style="clip-path: polygon(0 0, 38% 0, 42% 40%, 50% 60%, 58% 40%, 62% 0, 100% 0, 100% 100%, 0 100%);">
+                </div>
+
+                {{-- Container Tombol --}}
+                <div class="relative -top-6 bg-white p-2 rounded-full shadow-lg">
+                    {{-- Mengubah button menjadi tag 'a' agar bisa melakukan navigasi --}}
                     <a href="{{ route('satpam.qr_display') }}"
-                        class="w-full bg-white text-red-600 py-3 rounded-xl font-bold text-sm hover:bg-red-50 transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-qrcode text-lg"></i> TAMPILKAN QR
+                        class="w-14 h-14 bg-[#F1F3F4] rounded-full flex items-center justify-center border border-gray-100 shadow-inner active:scale-90 transition-transform decoration-transparent">
+                        <i class="fas fa-qrcode text-2xl text-gray-800"></i>
                     </a>
                 </div>
-                <i
-                    class="fas fa-shield-alt absolute -right-4 -bottom-4 text-8xl text-white/10 group-hover:rotate-12 transition-transform"></i>
-            </div>
-
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Ringkasan Hari Ini</h4>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-gray-500">Total Scan</span>
-                        <span class="text-sm font-bold text-gray-900">128</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-gray-500">Kendaraan Masuk</span>
-                        <span class="text-sm font-bold text-emerald-600">+84</span>
-                    </div>
-                </div>
             </div>
         </div>
-
-        <div class="lg:col-span-2">
-            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-                <div class="p-6 border-b border-gray-50 flex items-center justify-between">
-                    <h3 class="font-black text-gray-800 uppercase tracking-tight">Data Scan Terbaru</h3>
-                    <span class="flex h-2 w-2 rounded-full bg-red-600 animate-ping"></span>
-                </div>
-
-                <div class="divide-y divide-gray-50">
-                    @forelse($recentScans as $scan)
-                        <div
-                            class="p-5 hover:bg-gray-50 transition-colors flex flex-wrap md:flex-nowrap items-center justify-between gap-4">
-                            <div class="flex items-center gap-4">
-                                <div
-                                    class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-500">
-                                    <i class="fas fa-car-side"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-black text-gray-900">{{ $scan->kendaraan->plat_nomor }}</h4>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
-                                        {{ $scan->kendaraan->model_kendaraan }}</p>
-                                </div>
-                            </div>
-
-                            <div class="text-center md:text-left">
-                                <p class="text-[9px] text-gray-400 uppercase font-bold">Waktu Scan</p>
-                                <p class="text-xs font-bold text-gray-700">
-                                    {{ \Carbon\Carbon::parse($scan->waktu_masuk)->format('H:i:s') }}</p>
-                            </div>
-
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="px-3 py-1 rounded-full text-[9px] font-black uppercase {{ $scan->status == 'masuk' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
-                                    {{ $scan->status }}
-                                </span>
-                                <a href="{{ route('satpam.verifikasi', $scan->id_parkir) }}"
-                                    class="bg-gray-900 text-white px-4 py-2 rounded-xl text-[10px] font-bold hover:bg-red-600 transition shadow-sm">
-                                    DETAIL
-                                </a>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="py-20 text-center">
-                            <i class="fas fa-camera-retro text-4xl text-gray-200 mb-4"></i>
-                            <p class="text-sm text-gray-400 italic">Tidak ada data scan terbaru.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-                <a href="{{ route('satpam.riwayat_parkir') }}"
-                    class="block p-4 text-center bg-gray-50 text-[10px] font-black text-gray-500 hover:text-red-600 uppercase tracking-widest transition">
-                    Lihat Semua Aktivitas
-                </a>
-            </div>
-        </div>
+    </div>
     </div>
 @endsection

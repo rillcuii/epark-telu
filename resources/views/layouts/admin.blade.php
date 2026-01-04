@@ -4,141 +4,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - E-Park</title>
+    <title>E-Park Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        figmaRed: '#EE2B2B'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
+        .sidebar-transition {
+            transition: transform 0.3s ease-in-out;
+        }
 
-            .sidebar.open {
-                transform: translateX(0);
-            }
+        .bg-pattern {
+            background-image: radial-gradient(#e5e7eb 0.5px, transparent 0.5px);
+            background-size: 4px 4px;
         }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800">
+<body class="bg-gray-100 font-sans antialiased overflow-x-hidden">
 
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside id="sidebar"
-            class="sidebar w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white flex-shrink-0 shadow-2xl fixed md:static h-screen md:h-auto z-50 flex flex-col overflow-y-auto">
-            <!-- Header -->
-            <div class="p-6 border-b border-slate-700">
-                <div class="flex items-center justify-between">
+    <div class="flex justify-center min-h-screen">
+        <div class="w-full max-w-[430px] bg-white shadow-2xl relative min-h-screen flex flex-col overflow-hidden">
+
+            <div id="sidebar"
+                class="fixed inset-y-0 left-0 w-[350px] bg-white z-[60] sidebar-transition -translate-x-full flex flex-col shadow-2xl">
+                <div class="p-8 border-b border-gray-100 flex items-center gap-4 mt-8">
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nama_user) }}&background=f3f4f6&color=EE2B2B&bold=true"
+                        class="w-14 h-14 rounded-full border border-gray-100">
                     <div>
-                        <h1
-                            class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                            E-Park</h1>
-                        <p class="text-xs text-gray-400 mt-1">Admin Panel</p>
+                        <h3 class="text-base font-bold text-gray-900 leading-tight">{{ Auth::user()->nama_user }}</h3>
+                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Admin •
+                            {{ Auth::user()->id_user ?? 'ID No Found' }}</p>
                     </div>
-                    <button onclick="toggleSidebar()" class="md:hidden text-gray-400 hover:text-white">
-                        <i class="fas fa-times text-xl"></i>
+                </div>
+
+                <nav class="flex-grow p-6">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-4 p-4 text-figmaRed">
+                        <i class="fas fa-home text-2xl"></i>
+                        <span class="text-lg font-bold">Home</span>
+                    </a>
+                </nav>
+
+                <div class="p-8 border-t border-gray-100">
+                    <button onclick="showLogoutModal()" class="flex items-center gap-4 text-figmaRed font-bold">
+                        <i class="fas fa-sign-out-alt text-2xl rotate-180"></i>
+                        <span class="text-lg">Log Out</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Navigation -->
-            <nav class="p-4 space-y-2 flex-grow overflow-y-auto">
-                <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center p-3 rounded-lg transition-all duration-200 group {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50' : 'hover:bg-slate-700/50 text-gray-300 hover:text-white' }}">
-                    <i
-                        class="fas fa-home w-5 {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-blue-400 group-hover:text-blue-300' }}"></i>
-                    <span class="ml-3 font-medium">Dashboard</span>
-                </a>
+            <div id="overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[50] hidden"
+                onclick="closeSidebar()"></div>
 
-                <a href="{{ route('satpam.index') }}"
-                    class="flex items-center p-3 rounded-lg transition-all duration-200 group {{ request()->routeIs('satpam.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50' : 'hover:bg-slate-700/50 text-gray-300 hover:text-white' }}">
-                    <i
-                        class="fas fa-user-shield w-5 {{ request()->routeIs('satpam.*') ? 'text-white' : 'text-green-400 group-hover:text-green-300' }}"></i>
-                    <span class="ml-3 font-medium">Kelola Satpam</span>
-                </a>
-
-                <a href="{{ route('keluhan.index') }}"
-                    class="flex items-center p-3 rounded-lg transition-all duration-200 group {{ request()->routeIs('keluhan.*') ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50' : 'hover:bg-slate-700/50 text-gray-300 hover:text-white' }}">
-                    <i
-                        class="fas fa-exclamation-circle w-5 {{ request()->routeIs('keluhan.*') ? 'text-white' : 'text-yellow-400 group-hover:text-yellow-300' }}"></i>
-                    <span class="ml-3 font-medium">Keluhan</span>
-                </a>
-            </nav>
-
-            <!-- Logout Section -->
-            <div class="p-4 border-t border-slate-700 mt-auto flex-shrink-0">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit"
-                        class="flex items-center w-full p-3 text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200 group hover:text-red-300">
-                        <i class="fas fa-sign-out-alt w-5"></i>
-                        <span class="ml-3 font-medium">Logout</span>
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        <!-- Overlay for mobile -->
-        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"
-            onclick="toggleSidebar()"></div>
-
-        <!-- Main Content -->
-        <main class="flex-grow flex flex-col min-h-screen md:ml-0">
-            <!-- Top Bar -->
-            <header class="bg-white shadow-sm sticky top-0 z-30">
-                <div class="flex items-center justify-between px-6 py-4">
-                    <button onclick="toggleSidebar()" class="md:hidden text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-
-                    <div class="flex items-center space-x-4 ml-auto">
-                        <div class="hidden md:flex items-center space-x-3">
-                            <div
-                                class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                A
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-gray-800">Admin</p>
-                                <p class="text-xs text-gray-500">Administrator</p>
-                            </div>
-                        </div>
+            <header class="bg-figmaRed h-52 w-full p-10 relative">
+                <div class="flex items-center gap-4 relative z-10 cursor-pointer group" onclick="toggleSidebar()">
+                    <div
+                        class="w-14 h-14 bg-white/20 rounded-full border border-white/30 backdrop-blur-md overflow-hidden transition group-hover:scale-105">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nama_user) }}&background=fff&color=EE2B2B&bold=true"
+                            class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-white">
+                        <h3 class="text-base font-bold leading-tight">{{ Auth::user()->nama_user }}</h3>
+                        <p class="text-[10px] font-medium opacity-80 uppercase tracking-widest">Admin •
+                            {{ Auth::user()->id_user ?? 'ID Not Found' }}</p>
                     </div>
                 </div>
+                <div class="absolute bottom-0 left-0 w-full h-12 bg-white rounded-t-[40px] mt-2"></div>
             </header>
 
-            <!-- Content Area -->
-            <div class="flex-grow p-6 md:p-8">
+            <main class="flex-grow px-8 pb-10 relative z-20">
                 @yield('content')
-            </div>
+            </main>
 
-            <!-- Footer -->
-            <footer class="bg-white border-t border-gray-200 py-4 px-6">
-                <p class="text-center text-sm text-gray-500">
-                    © 2025 E-Park. All rights reserved.
-                </p>
-            </footer>
-        </main>
+            <div id="logoutModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-6">
+                <div class="bg-white w-full max-w-[280px] rounded-[32px] p-8 shadow-2xl text-center">
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Peringatan</h4>
+                    <p class="text-sm text-gray-600 font-medium mb-10">Yakin Ingin Keluar Dari aplikasi?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="hideLogoutModal()"
+                            class="py-3 bg-gray-200 text-gray-900 rounded-xl font-bold text-sm">Tidak</button>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="w-full py-3 bg-figmaRed text-white rounded-xl font-bold text-sm shadow-lg shadow-figmaRed/30">Ya</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const logoutModal = document.getElementById('logoutModal');
 
-            sidebar.classList.toggle('open');
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
         }
 
-        // Close sidebar when clicking outside on mobile
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                document.getElementById('overlay').classList.add('hidden');
-                document.getElementById('sidebar').classList.remove('open');
-            }
-        });
-    </script>
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            hideLogoutModal();
+        }
 
+        function showLogoutModal() {
+            logoutModal.classList.remove('hidden');
+        }
+
+        function hideLogoutModal() {
+            logoutModal.classList.add('hidden');
+        }
+    </script>
 </body>
 
 </html>

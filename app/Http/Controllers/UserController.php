@@ -45,7 +45,7 @@ class UserController extends Controller
                 'email'     => $request->username . '@epark.com', // Dummy email agar db tidak error
             ]);
 
-            return redirect()->route('satpam.index')->with('success', 'Akun Satpam berhasil dibuat.');
+            return redirect()->route('satpam.index')->with('success', 'Data berhasil disimpan');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menyimpan data. Silakan coba lagi saat koneksi stabil.');
         }
@@ -82,7 +82,7 @@ class UserController extends Controller
             }
 
             $satpam->save();
-            return redirect()->route('satpam.index')->with('success', 'Perubahan akun berhasil disimpan.');
+            return redirect()->route('satpam.index')->with('success', 'Perubahan akun berhasil disimpan');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menyimpan data. Silakan coba lagi saat koneksi stabil.');
         }
@@ -94,6 +94,6 @@ class UserController extends Controller
         $satpam = User::where('id_user', $id)->firstOrFail();
         $satpam->delete();
 
-        return redirect()->route('satpam.index')->with('success', 'Data Berhasil Dihapus');
+        return redirect()->route('satpam.index')->with('success', 'Data berhasil dihapus');
     }
 }

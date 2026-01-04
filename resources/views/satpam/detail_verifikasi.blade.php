@@ -1,86 +1,118 @@
 @extends('layouts.satpam')
 
 @section('content')
-    <div class="max-w-2xl mx-auto space-y-6 pb-10">
-        <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div
-                    class="w-12 h-12 {{ $data->status == 'masuk' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600' }} rounded-2xl flex items-center justify-center text-xl">
-                    <i class="fas {{ $data->status == 'masuk' ? 'fa-sign-in-alt' : 'fa-sign-out-alt' }}"></i>
-                </div>
-                <div>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Aktivitas Parkir</p>
-                    <h2 class="text-sm font-black text-slate-900 uppercase">Sesi: {{ $data->status }}</h2>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Waktu Scan</p>
-                <p class="text-sm font-black text-slate-900">{{ date('H:i:s', strtotime($data->waktu_masuk)) }} WIB</p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
-                <div class="p-6 bg-slate-900 text-white">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">Identitas Mahasiswa</p>
-                    <h3 class="text-lg font-black tracking-tight">{{ $data->nama_user }}</h3>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
-                <div class="p-6 bg-indigo-600 text-white">
-                    <p class="text-[10px] font-bold text-indigo-200 uppercase tracking-[0.2em] mb-1">Spesifikasi Kendaraan
-                    </p>
-                    <h3 class="text-lg font-black tracking-tight">{{ $data->nomor_polisi }}</h3>
-                </div>
-                <div class="p-6 space-y-4">
-                    <div>
-                        <p class="text-[9px] font-black text-slate-400 uppercase">Model Kendaraan</p>
-                        <p class="text-sm font-bold text-slate-800">{{ $data->model_kendaraan }}</p>
-                    </div>
-                    <div>
-                        <p class="text-[9px] font-black text-slate-400 uppercase">Warna Kendaraan</p>
-                        <div class="flex items-center gap-2 mt-1">
-                            <p class="text-sm font-bold text-slate-800">{{ $data->warna_kendaraan ?? 'Tidak dicantumkan' }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @if ($data->url_foto_kendaraan || $data->url_foto_stnk)
-            <div class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Lampiran Fisik
-                </p>
-                <div class="grid grid-cols-2 gap-4">
-                    @if ($data->url_foto_kendaraan)
-                        <div class="space-y-2">
-                            <p class="text-[9px] font-black text-slate-400 uppercase text-center">Foto Kendaraan</p>
-                            <img src="{{ asset('storage/' . $data->url_foto_kendaraan) }}"
-                                class="w-full h-32 object-cover rounded-2xl border">
-                        </div>
-                    @endif
-                    @if ($data->url_foto_stnk)
-                        <div class="space-y-2">
-                            <p class="text-[9px] font-black text-slate-400 uppercase text-center">Foto STNK</p>
-                            <img src="{{ asset('storage/' . $data->url_foto_stnk) }}"
-                                class="w-full h-32 object-cover rounded-2xl border">
-                        </div>
-                    @endif
-                </div>
-            </div>
-        @endif
-
-        <div class="flex gap-4">
-            <a href="{{ route('satpam.dashboard') }}"
-                class="flex-1 py-4 bg-white text-slate-600 text-center rounded-2xl font-bold text-xs border border-slate-200 hover:bg-slate-50 transition uppercase tracking-widest">
-                Kembali
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50">
+        <div class="bg-figmaRed h-32 flex items-center px-8 rounded-b-[40px] shadow-lg">
+            <a href="{{ route('satpam.dashboard') }}" class="text-white text-2xl mr-6 transition active:scale-90">
+                <i class="fas fa-arrow-left"></i>
             </a>
-            <button onclick="window.location.href='{{ route('satpam.dashboard') }}'"
-                class="flex-[2] py-4 bg-emerald-600 text-white text-center rounded-2xl font-bold text-xs shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition uppercase tracking-widest">
-                Konfirmasi Aman
-            </button>
+            <h1 class="text-white text-xl font-bold tracking-tight">Detail Data Kendaraan</h1>
         </div>
+    </div>
+
+    <div class="px-5 pt-24 pb-20">
+        <h2 class="text-lg font-bold text-gray-900 mb-3 ml-1">Detail Kendaraan</h2>
+
+        <div class="bg-white rounded-[28px] shadow-sm border border-gray-50 relative overflow-hidden p-5">
+            <div class="absolute left-0 top-4 bottom-4 w-1 bg-[#EE2B2B] rounded-r-full"></div>
+
+            <div class="space-y-4">
+                <div class="grid gap-3">
+                    <div class="flex gap-2.5">
+                        <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#EE2B2B] shrink-0"></div>
+                        <div>
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">No. Polisi</p>
+                            <p class="text-xs font-bold text-gray-900">{{ $data->nomor_polisi }}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2.5">
+                        <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#EE2B2B] shrink-0"></div>
+                        <div>
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Model</p>
+                            <p class="text-xs font-bold text-gray-900 truncate">{{ $data->model_kendaraan }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid gap-3">
+                    <div class="flex gap-2.5">
+                        <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#EE2B2B] shrink-0"></div>
+                        <div>
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Pemilik</p>
+                            <p class="text-xs font-bold text-gray-900 truncate">{{ $data->nama_user }}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2.5">
+                        <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#EE2B2B] shrink-0"></div>
+                        <div>
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Warna</p>
+                            <p class="text-xs font-bold text-gray-900">{{ $data->warna_kendaraan ?? '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-[1px] bg-gray-50 w-full"></div>
+
+                <div class="grid gap-3">
+                    <div class="space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-[#EE2B2B]"></div>
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Foto Unit</p>
+                        </div>
+                        @if ($data->url_foto_kendaraan)
+                            <div class="rounded-2xl overflow-hidden border border-gray-100 h-28">
+                                <img src="{{ asset('storage/' . $data->url_foto_kendaraan) }}"
+                                    class="w-full h-full object-cover">
+                            </div>
+                        @else
+                            <div
+                                class="bg-gray-50 rounded-2xl h-28 flex items-center justify-center border border-dashed border-gray-200">
+                                <i class="fas fa-image text-gray-200 text-xl"></i>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-[#EE2B2B]"></div>
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Foto STNK</p>
+                        </div>
+                        @if ($data->url_foto_stnk)
+                            <div class="rounded-2xl overflow-hidden border border-gray-100 h-28">
+                                <img src="{{ asset('storage/' . $data->url_foto_stnk) }}"
+                                    class="w-full h-full object-cover">
+                            </div>
+                        @else
+                            <div
+                                class="bg-gray-50 rounded-2xl h-28 flex items-center justify-center border border-dashed border-gray-200">
+                                <i class="fas fa-file-invoice text-gray-200 text-xl"></i>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- <div class="pt-2">
+                    <button
+                        class="w-full py-3 bg-[#EE2B2B] text-white rounded-xl text-[11px] font-bold shadow-md shadow-red-100 active:scale-95 transition uppercase tracking-widest">
+                        Konfirmasi Aman
+                    </button>
+                </div> --}}
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] flex justify-center z-50">
+        <div class="relative w-full flex justify-center">
+            <div class="absolute bottom-0 w-full h-10 bg-white shadow-[0_-5px_15px_rgba(0,0,0,0.03)]"
+                style="clip-path: polygon(0 0, 38% 0, 42% 40%, 50% 60%, 58% 40%, 62% 0, 100% 0, 100% 100%, 0 100%);">
+            </div>
+            <div class="relative -top-6 bg-white p-2 rounded-full shadow-lg">
+                <div
+                    class="w-14 h-14 bg-[#F1F3F4] rounded-full flex items-center justify-center border border-gray-100 shadow-inner">
+                    <i class="fas fa-list-ul text-2xl text-gray-800"></i>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 @endsection
