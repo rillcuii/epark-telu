@@ -10,12 +10,15 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KendaraanController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::get('/login-sso', [LoginController::class, 'showLoginSSOForm'])->name('login.sso');
-Route::post('/proses-login', [LoginController::class, 'login'])->name('proses.login');
+// fix duplicate login
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::get('/login-sso', [LoginController::class, 'showLoginSSOForm'])->name('login.sso');
+    Route::post('/proses-login', [LoginController::class, 'login'])->name('proses.login');
+});
 
 Route::middleware(['auth'])->group(function () {
 

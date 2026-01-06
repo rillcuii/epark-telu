@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,6 +16,19 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
+        $middleware->redirectUsersTo(function (Request $request) {
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return route('admin.dashboard');
+            } elseif ($user->role === 'mahasiswa') {
+                return route('mahasiswa.dashboard');
+            } elseif ($user->role === 'satpam') {
+                return route('satpam.dashboard');
+            }
+
+            return '/404';
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
