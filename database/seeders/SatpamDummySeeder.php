@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Users;
 use App\Models\Kendaraan;
 use App\Models\Parkir;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +14,7 @@ class SatpamDummySeeder extends Seeder
     public function run(): void
     {
         // 1. Buat Dummy Mahasiswa
-        $mhs1 = User::create([
+        $mhs1 = Users::create([
             'nama_user' => 'Rizky Sanusi',
             'username'  => 'rizky_mhs',
             'password'  => Hash::make('password123'),
@@ -41,7 +41,7 @@ class SatpamDummySeeder extends Seeder
         ]);
 
         // Tambah mahasiswa 2 untuk variasi di dashboard
-        $mhs2 = User::create([
+        $mhs2 = Users::create([
             'nama_user' => 'Siti Aminah',
             'username'  => 'siti_mhs',
             'password'  => Hash::make('password123'),

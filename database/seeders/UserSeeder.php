@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Users;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Membuat akun Admin
-        User::create([
+        Users::create([
             'nama_user' => 'Administrator E-Park',
             'nim'       => null, // Admin biasanya tidak punya NIM
             'username'  => 'admin_epark',
@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
         ]);
 
         // Membuat akun Satpam
-        User::create([
+        Users::create([
             'nama_user' => 'Bapak Satpam Parkir',
             'nim'       => null,
             'username'  => 'satpam_epark',

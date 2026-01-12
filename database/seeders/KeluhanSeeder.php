@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Users;
 use App\Models\Keluhan;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,7 +12,7 @@ class KeluhanSeeder extends Seeder
     public function run(): void
     {
         // 1. Buat Dummy Mahasiswa
-        $mhs1 = User::create([
+        $mhs1 = Users::create([
             'nama_user' => 'Rizky Pratama',
             'username'  => 'rizky2_mhs',
             'password'  => Hash::make('password123'),
@@ -20,7 +20,7 @@ class KeluhanSeeder extends Seeder
             'email'     => 'rizky@student.com',
         ]);
 
-        $mhs2 = User::create([
+        $mhs2 = Users::create([
             'nama_user' => 'Siti Aminah',
             'username'  => 'siti2_mhs',
             'password'  => Hash::make('password123'),

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Users;
 use App\Models\Keluhan;
 use Illuminate\Http\Request;
 
@@ -11,12 +11,12 @@ class DashboardController extends Controller
     public function admin()
     {
 
-        $countSatpam = User::where('role', 'satpam')->count();
-        $countMahasiswa = User::where('role', 'mahasiswa')->count();
+        $countSatpam = Users::where('role', 'satpam')->count();
+        $countMahasiswa = Users::where('role', 'mahasiswa')->count();
         $countKeluhan = Keluhan::where('status_keluhan', 'belum_ditangani')->count();
         $countKendaraan = 0; // Placeholder
 
-        $lastSatpam = User::where('role', 'satpam')->latest()->first();
+        $lastSatpam = Users::where('role', 'satpam')->latest()->first();
 
         $lastKeluhanMasuk = Keluhan::where('status_keluhan', 'belum_ditangani')->latest()->first();
 

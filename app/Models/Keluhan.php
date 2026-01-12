@@ -21,7 +21,7 @@ class Keluhan extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'users_id', 'id_user');
+        return $this->belongsTo(Users::class, 'users_id', 'id_user');
     }
 
     protected static function booted(): void
