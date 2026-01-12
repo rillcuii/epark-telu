@@ -24,7 +24,7 @@ class Parkir extends Model
     // Relasi ke User
     public function user()
     {
-        return $this->belongsTo(User::class, 'users_id', 'id_user');
+        return $this->belongsTo(Users::class, 'users_id', 'id_user');
     }
 
     // Relasi ke Kendaraan

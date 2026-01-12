@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Users;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $satpams = User::where('role', 'satpam')->get();
+        $satpams = Users::where('role', 'satpam')->get();
         return view('admin.kelola_satpam.index', compact('satpams'));
     }
 
@@ -37,7 +37,7 @@ class UserController extends Controller
         ]);
 
         try {
-            User::create([
+            Users::create([
                 'nama_user' => $request->nama_user,
                 'username'  => $request->username,
                 'password'  => Hash::make($request->password),
@@ -54,14 +54,14 @@ class UserController extends Controller
     // Form Edit
     public function edit($id)
     {
-        $satpam = User::where('id_user', $id)->firstOrFail();
+        $satpam = Users::where('id_user', $id)->firstOrFail();
         return view('admin.kelola_satpam.edit', compact('satpam'));
     }
 
     // Update Data
     public function update(Request $request, $id)
     {
-        $satpam = User::where('id_user', $id)->firstOrFail();
+        $satpam = Users::where('id_user', $id)->firstOrFail();
 
         $request->validate([
             'nama_user' => 'required',
@@ -91,7 +91,7 @@ class UserController extends Controller
     // Hapus Data
     public function destroy($id)
     {
-        $satpam = User::where('id_user', $id)->firstOrFail();
+        $satpam = Users::where('id_user', $id)->firstOrFail();
         $satpam->delete();
 
         return redirect()->route('satpam.index')->with('success', 'Data berhasil dihapus');
