@@ -69,7 +69,7 @@ class ParkirController extends Controller
             ->first();
 
         // 4. Kirim kedua variabel ke view agar error $activeParking hilang
-        return view('mahasiswa.scanner', compact('kendaraan', 'activeParking'));
+        return view('mahasiswa.scan_qr', compact('kendaraan', 'activeParking'));
     }
 
     public function scanProses(Request $request)

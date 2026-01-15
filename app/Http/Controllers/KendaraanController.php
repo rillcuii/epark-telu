@@ -17,12 +17,12 @@ class KendaraanController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('mahasiswa.kendaraan.index', compact('kendaraans'));
+        return view('mahasiswa.kendaraan.kendaraan', compact('kendaraans'));
     }
 
     public function create()
     {
-        return view('mahasiswa.kendaraan.create');
+        return view('mahasiswa.kendaraan.form_tambah_kendaraan');
     }
 
     public function store(Request $request)
@@ -77,7 +77,7 @@ class KendaraanController extends Controller
             return redirect()->route('mahasiswa.kendaraan.index')->with('error', 'Data tidak ditemukan.');
         }
 
-        return view('mahasiswa.kendaraan.edit', compact('kendaraan'));
+        return view('mahasiswa.kendaraan.form_edit_kendaraan', compact('kendaraan'));
     }
 
     public function update(Request $request, $id)
